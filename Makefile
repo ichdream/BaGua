@@ -21,7 +21,7 @@ C_FLAGS = -c -Wall -m32 -ggdb -gstabs+ -nostdinc -fno-builtin -fno-stack-protect
 LD_FLAGS = -T scripts/kernel.ld -m elf_i386 -nostdlib
 ASM_FLAGS = -f elf -g -F stabs
 
-all: $(S_OBJECTS) $(C_OBJECTS) link update_image
+all: clean $(S_OBJECTS) $(C_OBJECTS) link update_image
 
 # The automatic variable `$<' is just the first prerequisite
 .c.o:
@@ -43,9 +43,11 @@ clean:
 .PHONY:update_image
 update_image:
 	sudo mount ./hd.img /mnt/kernel
+	sudo rm -rf /mnt/kernel/BaGua_OS
 	sudo cp -i BaGua_OS /mnt/kernel/BaGua_OS
-	sleep 1
-	qemu-img convert -O qcow2 ./hd.img ./BaGua_HD.img
+	sleep 3
+	qemu-img convert -f raw -O qcow2 hd.img BaGua_HD.img
+	sleep 3
 	sudo umount /mnt/kernel
 
 .PHONY:mount_image

@@ -43,7 +43,7 @@ clean:
 .PHONY:update_image
 update_image:
 	sudo mount ./hd.img /mnt/kernel
-	sudo cp BaGua_OS /mnt/kernel/BaGua_OS
+	sudo cp -i BaGua_OS /mnt/kernel/BaGua_OS
 	sleep 1
 	qemu-img convert -O qcow2 ./hd.img ./BaGua_HD.img
 	sudo umount /mnt/kernel

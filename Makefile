@@ -62,6 +62,10 @@ umount_image:
 qemu:
 	qemu -hda BaGua_HD.img -boot a
 
+.PHONY:raw
+raw:
+	qemu -hda hd.img
+
 .PHONY:debug
 debug:
 	qemu -S -s -hda BaGua_HD.img -boot a &

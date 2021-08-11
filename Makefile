@@ -38,7 +38,7 @@ link:
 
 .PHONY:clean
 clean:
-	$(RM) $(S_OBJECTS) $(C_OBJECTS) BaGua_OS
+	$(RM) $(S_OBJECTS) $(C_OBJECTS) BaGua_OS BaGua_HD.img
 
 .PHONY:update_image
 update_image:

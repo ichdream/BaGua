@@ -1,4 +1,7 @@
-# BaGua
+# BaGua<img src="asserts/1335529.jpg" alt="八卦图图标" style="zoom:15%;" />
+
+<img src="asserts/image-20210811171151986.png" alt="image-20210811171151986" style="zoom:20%;" />
+
 BaGua Operating system is aiming to focus on the future's needs, accelerating the world to be more flexible, warmable, believable.
 
 八卦操作系统专注于未来世界的需求，加速⏩世界向更加有温度，可信任，灵活的，智慧的方向发展。

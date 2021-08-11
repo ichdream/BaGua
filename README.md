@@ -38,7 +38,7 @@ BaGua Operating system is aiming to focus on the future's needs, accelerating th
 - drivers io操作功能
 - scripts 编译以及链接运行脚本
 
-<img src="asserts/image-20210810224013226.png" alt="image-20210810224013226" style="zoom:50%;" />
+<img src="asserts/image-20210810224013226.png" alt="image-20210810224013226" style="zoom: 40%;" />
 
 另外，提供虚拟硬盘hd.img大小10M，供系统启动使用。
 
@@ -50,4 +50,36 @@ BaGua Operating system is aiming to focus on the future's needs, accelerating th
 
 这里，我选择的是qemu+virtualBox。
 
-<img src="asserts/image-20210810224616935.png" alt="image-20210810224616935" style="zoom:50%;" />
+1 进入目录
+
+```shell
+cd BaGua
+```
+
+2 运行make，生成虚拟磁盘文件和系统BaGua_OS
+
+```shell
+make
+```
+
+3 运行虚拟机，启动BaGua_OS
+
+```shell
+make qemu
+```
+
+<img src="asserts/image-20210810224616935.png" alt="image-20210810224616935" style="zoom: 40%;" />
+
+## 版本更新
+
+### V0.00 首发版本
+
+### V0.01版本
+
+这个版本添加内核级别调试相关功能函数
+
+- debug 支持内核错误🙅‍♂️时打印一些重要‼️的信息
+- printk 内核级显示函数支持
+- 字符串操作的支持
+
+<img src="asserts/image-20210811125446245.png" alt="image-20210811125446245" style="zoom: 40%;" />

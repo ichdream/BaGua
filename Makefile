@@ -35,6 +35,7 @@ all: clean $(S_OBJECTS) $(C_OBJECTS) link update_image
 link:
 	@echo 链接内核文件...
 	$(LD) $(LD_FLAGS) $(S_OBJECTS) $(C_OBJECTS) -o BaGua_OS
+	$(RM) $(S_OBJECTS) $(C_OBJECTS)
 
 .PHONY:clean
 clean:
@@ -46,9 +47,9 @@ update_image:
 	sudo rm -rf /mnt/kernel/BaGua_OS
 	sudo cp -i BaGua_OS /mnt/kernel/BaGua_OS
 	sleep 3
-	qemu-img convert -f raw -O qcow2 hd.img BaGua_HD.img
-	sleep 3
 	sudo umount /mnt/kernel
+	sleep 3
+	qemu-img convert -f raw -O qcow2 hd.img BaGua_HD.img
 
 .PHONY:mount_image
 mount_image:

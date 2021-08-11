@@ -1,6 +1,8 @@
 # BaGua
 BaGua Operating system is aiming to focus on the future's needs, accelerating the world to be more flexible, warmable, believable.
 
+八卦操作系统专注于未来世界的需求，加速⏩世界向更加有温度，可信任，灵活的，智慧的方向发展。
+
 ## 缘起
 
 八卦源自中国传统文化中的一种阵法，名“八卦阵”。

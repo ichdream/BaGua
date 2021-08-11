@@ -85,3 +85,9 @@ make qemu
 - 字符串操作的支持
 
 <img src="asserts/image-20210811125446245.png" alt="image-20210811125446245" style="zoom: 40%;" />
+
+## V0.02版本
+
+- 增加全局描述符表的支持
+
+<img src="asserts/image-20210811164053085.png" alt="image-20210811164053085" style="zoom:40%;" />

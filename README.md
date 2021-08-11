@@ -1,4 +1,4 @@
-# BaGua<img src="asserts/1335529.jpg" alt="八卦图图标" style="zoom:5%;" />
+# BaGua
 
 ----
 
@@ -6,7 +6,7 @@ BaGua Operating system is aiming to focus on the future's needs, accelerating th
 
 八卦操作系统专注于未来世界的需求，加速⏩世界向更加有温度，可信任，灵活的，智慧的方向发展。
 
-<img src="asserts/image-20210811171151986.png" alt="image-20210811171151986" style="zoom:10%;" />
+
 
 ## 缘起
 
@@ -45,7 +45,7 @@ BaGua Operating system is aiming to focus on the future's needs, accelerating th
 - drivers io操作功能
 - scripts 编译以及链接运行脚本
 
-<img src="asserts/image-20210810224013226.png" alt="image-20210810224013226" style="zoom: 40%;" />
+> <img src="asserts/image-20210810224013226.png" alt="image-20210810224013226" style="zoom: 40%;" />
 
 另外，提供虚拟硬盘hd.img大小10M，供系统启动使用。
 
@@ -75,7 +75,7 @@ make
 make qemu
 ```
 
-<img src="asserts/image-20210810224616935.png" alt="image-20210810224616935" style="zoom: 40%;" />
+> <img src="asserts/image-20210810224616935.png" alt="image-20210810224616935" style="zoom: 40%;" />
 
 ## 版本更新
 
@@ -89,10 +89,16 @@ make qemu
 - printk 内核级显示函数支持
 - 字符串操作的支持
 
-<img src="asserts/image-20210811125446245.png" alt="image-20210811125446245" style="zoom: 40%;" />
+> <img src="asserts/image-20210811125446245.png" alt="image-20210811125446245" style="zoom: 40%;" />
 
 ## V0.02版本
 
 - 增加全局描述符表的支持
 
-<img src="asserts/image-20210811164053085.png" alt="image-20210811164053085" style="zoom:40%;" />
+> <img src="asserts/image-20210811164053085.png" alt="image-20210811164053085" style="zoom:40%;" />
+
+- 增加中断注册，中断请求服务框架
+- 支持8259A芯片级联下的中断控制服务
+- 定时器中断8243芯片的支持
+
+> <img src="asserts/image-20210811222848698.png" alt="image-20210811222848698" style="zoom: 40%;" />

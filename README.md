@@ -127,3 +127,10 @@ make qemu
   - 双向链表实现
 
 > <img src="asserts/image-20210813131954611.png" alt="image-20210813131954611" style="zoom:33%;" />
+
+## V0.04版本
+
+- 增加内核进程/线程的统一表示，借鉴Linux风格
+- 内核进程/线程的调度
+
+> <img src="asserts/image-20210813164457920.png" alt="image-20210813164457920" style="zoom:33%;" />

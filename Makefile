@@ -13,11 +13,11 @@ C_OBJECTS = $(patsubst %.c, %.o, $(C_SOURCES))
 S_SOURCES = $(shell find . -name "*.s")
 S_OBJECTS = $(patsubst %.s, %.o, $(S_SOURCES))
 
-CC = gcc
+CC = gcc-10
 LD = ld
 ASM = nasm
 
-C_FLAGS = -c -Wall -m32 -ggdb -gstabs+ -nostdinc -fno-pic -fno-builtin -fno-stack-protector -I include
+C_FLAGS = -c -Wall -m32 -ggdb -gstabs+ -fgnu89-inline -nostdinc -fno-pic -fno-builtin -fno-stack-protector -I include
 LD_FLAGS = -T scripts/kernel.ld -m elf_i386 -nostdlib
 ASM_FLAGS = -f elf -g -F stabs
 
@@ -35,11 +35,16 @@ all: clean $(S_OBJECTS) $(C_OBJECTS) link update_image
 link:
 	@echo 链接内核文件...
 	$(LD) $(LD_FLAGS) $(S_OBJECTS) $(C_OBJECTS) -o BaGua_OS
-	$(RM) $(S_OBJECTS) $(C_OBJECTS)
+	# $(RM) $(S_OBJECTS) $(C_OBJECTS)
 
 .PHONY:clean
 clean:
 	$(RM) $(S_OBJECTS) $(C_OBJECTS) BaGua_OS BaGua_HD.img
+
+.PHONY:obj
+obj:$(S_OBJECTS) $(C_OBJECTS)
+	@echo 生成目标文件，可执行文件
+	$(LD) $(LD_FLAGS) $(S_OBJECTS) $(C_OBJECTS) -o BaGua_OS
 
 .PHONY:update_image
 update_image:

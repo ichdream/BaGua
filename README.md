@@ -126,4 +126,4 @@ make qemu
   - 满足小块内存的分配和释放，内存需求<4kb时
   - 双向链表实现
 
-<img src="asserts/image-20210813131954611.png" alt="image-20210813131954611" style="zoom:33%;" />
+> <img src="asserts/image-20210813131954611.png" alt="image-20210813131954611" style="zoom:33%;" />

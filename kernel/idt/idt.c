@@ -137,7 +137,7 @@ static void idt_set_gate(uint8_t num, uint32_t base, uint16_t sel, uint8_t flags
 	idt_entries[num].flags = flags;  // | 0x60
 }
 
-// 调用中断处理函数
+// 调用中断处理函数 内部中断
 void isr_handler(pt_regs *regs)
 {
 	if (interrupt_handlers[regs->int_no]) {
@@ -153,7 +153,7 @@ void register_interrupt_handler(uint8_t n, interrupt_handler_t h)
 	interrupt_handlers[n] = h;
 }
 
-// IRQ 处理函数
+// IRQ 处理函数 主要用于外部中断
 void irq_handler(pt_regs *regs)
 {
 	// 发送中断结束信号给 PICs

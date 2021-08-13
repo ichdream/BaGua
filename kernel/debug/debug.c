@@ -37,7 +37,8 @@ void panic(const char *msg)
     printk("***\n");
 
     // 致命错误发生后打印栈信息后停止在这里
-    while(1);
+    // while(1);
+    asm volatile ("stop: hlt \n \t;" "jmp stop;");
 }
 
 void print_stack_trace()

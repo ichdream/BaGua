@@ -33,6 +33,12 @@ struct multiboot_t {
      * 低端内存的首地址是0，高端内存的首地址是1M。
      * 低端内存的最大可能值是640K。
      * 高端内存的最大可能值是最大值减去1M。但并不保证是这个值。
+     * If bit 0 in the ‘flags’ word is set, then the ‘mem_*’ fields are valid. 
+     * ‘mem_lower’ and ‘mem_upper’ indicate the amount of lower and upper memory, respectively, in kilobytes. 
+     * Lower memory starts at address 0, and upper memory starts at address 1 megabyte. 
+     * The maximum possible value for lower memory is 640 kilobytes. 
+     * The value returned for upper memory is maximally the address of the first upper memory hole minus 1 megabyte. 
+     * It is not guaranteed to be this value.
      */
     uint32_t mem_lower;
     uint32_t mem_upper;
@@ -90,6 +96,11 @@ struct mmap_entry_t {
 } __attribute__((packed)) mmap_entry_t;
 
 // 声明全局的 multiboot_t * 指针
+// 内核未建立分页机制前暂存的指针
+extern multiboot_t *mboot_ptr_tmp;
+
+// 声明全局的 multiboot_t * 指针
 extern multiboot_t *glb_mboot_ptr;
+
 
 #endif  // INCLUDE_MULTIBOOT_H_

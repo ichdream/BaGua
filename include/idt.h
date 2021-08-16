@@ -5,10 +5,26 @@
 #ifndef INCLUDE_IDT_H_
 #define INCLUDE_IDT_H_
 
+# define EFLAGS_IF 0x00000200
+# define GET_EFLAGS(EFLAG_VAR) asm volatile ("pushfl; popl %0" : "=g" (EFLAG_VAR))
+
 #include "types.h"
 
 // 初始化中断描述符表
 void init_idt();
+
+/**
+ * 中断状态.
+ */ 
+enum intr_status {
+    INTR_OFF,
+    INTR_ON
+};
+
+enum intr_status intr_get_status(void);
+enum intr_status intr_set_status(enum intr_status);
+enum intr_status intr_enable(void);
+enum intr_status intr_disable(void);
 
 // 中断描述符
 typedef

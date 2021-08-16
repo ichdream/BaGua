@@ -25,6 +25,50 @@ static void idt_set_gate(uint8_t num, uint32_t base, uint16_t sel, uint8_t flags
 // 声明加载 IDTR 的函数
 extern void idt_flush(uint32_t);
 
+
+/**
+ * 开中断并返回之前的状态.
+ */ 
+enum intr_status intr_enable() {
+    enum intr_status old_status;
+    if (INTR_ON == intr_get_status()) {
+        old_status = INTR_ON;
+	    return old_status;
+    }
+
+    old_status = INTR_OFF;
+    asm volatile ("sti");
+    return old_status;
+}
+
+/**
+ * 关中断并返回之前的状态.
+ */
+enum intr_status intr_disable() {
+    enum intr_status old_status;
+    if (INTR_OFF == intr_get_status()) {
+        old_status = INTR_OFF;
+        return old_status;
+    }
+
+    old_status = INTR_ON;
+    asm volatile ("cli" : : : "memory");
+    return old_status;
+}
+
+/**
+ * 获取中断状态.
+ */ 
+enum intr_status intr_get_status() {
+    uint32_t eflags = 0;
+    GET_EFLAGS(eflags);
+    return (EFLAGS_IF & eflags) ? INTR_ON : INTR_OFF;
+}
+
+enum intr_status intr_set_status(enum intr_status status) {
+    return status & INTR_ON ? intr_enable() : intr_disable();
+}
+
 // 初始化中断描述符表
 void init_idt()
 {	

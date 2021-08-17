@@ -1,35 +1,27 @@
-; -------------------------------------------------
-; 	线程切换的实现
+[bits 32]
+section .text
+global switch_to
+; --------------------------------------------
+; switch_to接受两个参数，第一个参数是当前线程cur，第二个参数是下一个将要运行的线程next
+; 函数的功能：保存cur线程的寄存器映像，将下一个线程next的寄存器映像载入处理器中；
+; 程序13～16行是遵循ABI原则
 ;
-; -------------------------------------------------
-
-[global switch_to]
-
-; 具体的线程切换操作，重点在于寄存器的保存与恢复
-; 函数原型：switch_to(&(prev->context), &(current->context));
-; 函数参数入栈时，先入current->context的地址
-; mov指令格式：mov dest org， det: 目标地址， org原地址 
+; --------------------------------------------
 switch_to:
-        mov eax, [esp+4]      ; 将[esp+4]的值（地址）存入eax寄存器中， 即prev的地址
+    ; 将中断处理函数的上下文保存到目标PCB的栈中
+    ; 这里隐含的是下次调度返回的地址其实是switch_to的返回地址
+    push esi
+    push edi
+    push ebx
+    push ebp
+    mov eax, [esp + 20]             ; 得到栈中的参数cur, cur = [esp + 20]
+    mov [eax], esp                  ; 保存栈指针esp到task_struct的self_kstack字段
 
-        mov [eax+0],  esp     ; 将esp寄存器的值存入地址[eax+0]处
-        mov [eax+4],  ebp     ; 将ebp寄存器的值存入地址[eax+0]处
-        mov [eax+8],  ebx
-        mov [eax+12], esi
-        mov [eax+16], edi
-        pushf
-        pop ecx
-        mov [eax+20], ecx
-
-        mov eax, [esp+8]
-
-        mov esp, [eax+0]
-        mov ebp, [eax+4]
-        mov ebx, [eax+8]
-        mov esi, [eax+12]
-        mov edi, [eax+16]
-        mov eax, [eax+20]
-        push eax
-        popf
- 	
-        ret
+    ; 跳到目标PCB执行
+    mov eax, [esp + 24]
+    mov esp, [eax]
+    pop ebp
+    pop ebx
+    pop edi
+    pop esi
+    ret

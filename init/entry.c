@@ -8,7 +8,7 @@
 #include "vmm.h"
 #include "heap.h"
 #include "task.h"
-#include "sched.h"
+// #include "sched.h"
 #include "common.h"
 
 // 内核初始化函数
@@ -27,13 +27,19 @@ uint32_t kern_stack_top;
 // 该地址必须是页对齐的地址，内存 0-640KB 肯定是空闲的
 __attribute__((section(".init.data"))) pgd_t *pgd_tmp  = (pgd_t *)0x1000;
 __attribute__((section(".init.data"))) pgd_t *pte_low  = (pgd_t *)0x2000;
-__attribute__((section(".init.data"))) pgd_t *pte_hign = (pgd_t *)0x3000;
+__attribute__((section(".init.data"))) pgd_t *pte_high = (pgd_t *)0x3000;
+__attribute__((section(".init.data"))) pgd_t *pte_hign_last = (pgd_t *)(0x3000 + 1023 * 0x1000);
 
 // 内核入口函数
 __attribute__((section(".init.text"))) void kern_entry()
 {
 	pgd_tmp[0] = (uint32_t)pte_low | PAGE_PRESENT | PAGE_WRITE;
-	pgd_tmp[PGD_INDEX(PAGE_OFFSET)] = (uint32_t)pte_hign | PAGE_PRESENT | PAGE_WRITE;
+	for(int i = 769; i < 1023; i++) {
+		pgd_t *pte_hign_tmp = i * 0x1000 + pte_high;
+		pgd_tmp[i] = (uint32_t)pte_hign_tmp | PAGE_PRESENT | PAGE_WRITE;
+	}
+	pgd_tmp[768] = (uint32_t)pte_high | PAGE_PRESENT | PAGE_WRITE;
+	pgd_tmp[1023] = (uint32_t)pgd_tmp | PAGE_PRESENT | PAGE_WRITE;
 
 	// 映射内核虚拟地址 4MB 到物理地址的前 4MB
 	int i;
@@ -43,10 +49,10 @@ __attribute__((section(".init.text"))) void kern_entry()
 
 	// 映射 0x00000000-0x00400000 的物理地址到虚拟地址 0xC0000000-0xC0400000
 	for (i = 0; i < 1024; i++) {
-		pte_hign[i] = (i << 12) | PAGE_PRESENT | PAGE_WRITE;
+		pte_high[i] = (i << 12) | PAGE_PRESENT | PAGE_WRITE;
 	}
-	
-	// 设置临时页表
+		
+	// 设置临时页目录表
 	asm volatile ("mov %0, %%cr3" : : "r" (pgd_tmp));
 
 	uint32_t cr0;
@@ -68,22 +74,30 @@ __attribute__((section(".init.text"))) void kern_entry()
 	kern_init();
 }
 
-int flag = 0;
-int cnt = 3;
 
-int thread(void *arg)
-{
-	while (1) {
-		if (flag == 1) {
-			printk_color(rc_black, rc_green, "Thread B\n");
-			flag = 0;
-			cnt--;
-		}
-		if(cnt == 0) break;
+void k_thread_function_a(void*);
+void k_thread_function_b(void*);
+
+
+void k_thread_function_a(void* args) {
+    // 这里必须是死循环，否则执行流并不会返回到main函数，所以CPU将会放飞自我，出发6号未知操作码异常
+	int cnt = 3;
+	while(cnt--) {
+		put_str((char*) args);
 	}
-	printk_color(rc_black, rc_green, "Thread B run, then exit...\n");
+    while (1) {
+		asm volatile ("hlt");
+    }
+}
 
-	return 0;
+void k_thread_function_b(void* args) {
+	int cnt = 5;
+	while(cnt--) {
+		put_str((char*) args);
+	}
+    while (1) {
+		asm volatile ("hlt");
+    }
 }
 
 void kern_init()
@@ -107,39 +121,38 @@ void kern_init()
 	printk("kernel in memory used:   %d KB\n\n", (kern_end - kern_start) / 1024);
 	
 	show_memory_map();
-	init_pmm();
-	init_vmm();
-	init_heap();
+	// init_pmm();
+	// init_vmm();
+	// init_heap();
 
-	printk_color(rc_black, rc_red, "\nThe Count of Physical Memory Page is: %u\n\n", phy_page_count);
+	// printk_color(rc_black, rc_red, "\nThe Count of Physical Memory Page is: %u\n\n", phy_page_count);
 
-	uint32_t allc_addr = NULL;
-	printk_color(rc_black, rc_light_brown, "Test Physical Memory Alloc :\n");
-	allc_addr = pmm_alloc_page();
-	printk_color(rc_black, rc_light_brown, "Alloc Physical Addr: 0x%08X\n", allc_addr);
-	allc_addr = pmm_alloc_page();
-	printk_color(rc_black, rc_light_brown, "Alloc Physical Addr: 0x%08X\n\n", allc_addr);
+	// uint32_t allc_addr = NULL;
+	// printk_color(rc_black, rc_light_brown, "Test Physical Memory Alloc :\n");
+	// allc_addr = pmm_alloc_page();
+	// printk_color(rc_black, rc_light_brown, "Alloc Physical Addr: 0x%08X\n", allc_addr);
+	// allc_addr = pmm_alloc_page();
+	// printk_color(rc_black, rc_light_brown, "Alloc Physical Addr: 0x%08X\n\n", allc_addr);
 	
-	test_heap();
+	// test_heap();
 
-	init_sched();
+	// init_sched();
 
-	kernel_thread(thread, NULL);
+	put_str("I am kernel.\n");
+    // init_all();
+	mem_init();
+	thread_init();
 
-	// 开启中断
-	enable_intr();
-	int cnt_B = 3;
-
-	while (1) {
-		if (flag == 0) {
-			printk_color(rc_black, rc_red, "Thread A\n");
-			flag = 1;
-			cnt_B--;
-		}
-		if(cnt_B == 0) break;
-		printk_color(rc_black, rc_green, "Thread A run, then exit...\n");
+	struct task_struct *thread_a = thread_start("k_thread_a", 31, k_thread_function_a, "threadA ");
+	printk("thread_a's pid: %d\n", thread_a->pid);
+    struct task_struct *thread_b = thread_start("k_thread_b", 8, k_thread_function_b, "threadB ");
+	printk("thread_b's pid: %d\n", thread_b->pid);
+	intr_enable();
+	int cnt = 5;
+	while(cnt--) {
+		put_str("main ");
 	}
-
+	
 	while (1) {
 		asm volatile ("hlt");
 	}

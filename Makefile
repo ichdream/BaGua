@@ -13,13 +13,13 @@ C_OBJECTS = $(patsubst %.c, %.o, $(C_SOURCES))
 S_SOURCES = $(shell find . -name "*.s")
 S_OBJECTS = $(patsubst %.s, %.o, $(S_SOURCES))
 
-CC = gcc-10
+CC = gcc
 LD = ld
 ASM = nasm
 
-C_FLAGS = -c -Wall -m32 -ggdb -gstabs+ -fgnu89-inline -nostdinc -fno-pic -fno-builtin -fno-stack-protector -I include
+C_FLAGS = -c -Wall -m32 -ggdb -gstabs+ -fgnu89-inline -nostdinc -fno-pic -fno-builtin -fno-stack-protector -I include #-DDEBUG
 LD_FLAGS = -T scripts/kernel.ld -m elf_i386 -nostdlib
-ASM_FLAGS = -f elf -g -F stabs
+ASM_FLAGS = -f elf -g -F stabs -I include/
 
 all: clean $(S_OBJECTS) $(C_OBJECTS) link update_image
 
@@ -66,7 +66,7 @@ umount_image:
 
 .PHONY:qemu
 qemu:
-	qemu -hda BaGua_HD.img -boot a
+	qemu -m 512M -hda BaGua_HD.img -boot a
 
 .PHONY:raw
 raw:

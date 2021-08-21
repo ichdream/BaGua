@@ -34,6 +34,9 @@ BaGua Operating system is aiming to focus on the future's needs, accelerating th
   - [ ] 共享内存
   - [ ] 自旋锁
   - [ ] 消息队列
+- [x] 中断机制
+  - [x] 基于经典8259A芯片的单核中断管理模块
+  - [ ] 基于APIC高级的多核的中断管理模块
 - [ ] 文件系统
   - [ ] 虚拟文件系统
 - [ ] 。。。。。。

@@ -8,6 +8,38 @@ BaGua Operating system is aiming to focus on the future's needs, accelerating th
 
 
 
+## 需求管理
+
+- [x] MBR引导，多系统引导协议支持(MultiBoot/MultiBoot2)
+
+- [x] 实模式到保护模式切换
+
+- [x] 分页模式-二级页表
+
+- [x] 内存管理
+  - [x] 虚拟地址空间分配管理
+    - [ ] 虚拟内存
+  - [x] 物理内存分配管理
+
+- [x] 任务调度和管理
+  - [x] 内核线程
+  - [x] 用户进程
+  - [x] 任务调度
+    - [x] 时间片轮转
+    - [x] 优先级
+    - [ ] 抢占模式
+- [x] 同步机制
+  - [x] 互斥锁
+  - [x] 信号量
+  - [ ] 共享内存
+  - [ ] 自旋锁
+  - [ ] 消息队列
+- [ ] 文件系统
+  - [ ] 虚拟文件系统
+- [ ] 。。。。。。
+
+
+
 ## 欢迎👏，朋友👬
 
 这是我的第一个操作系统，打算以git的方式进行跟踪开发。
@@ -41,6 +73,8 @@ BaGua Operating system is aiming to focus on the future's needs, accelerating th
 - 讨论
 
 。。。。。。
+
+
 
 
 
